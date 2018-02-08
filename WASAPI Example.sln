@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WASAPI Example.Plugins", "WASAPI Example.Plugins.csproj", "{FD0827F6-C9D2-85EF-5D4D-1BBA18BE1CB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WASAPI Example", "WASAPI Example.csproj", "{F1D05B96-F53E-ED5D-8F0E-44BC6297B3C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WASAPI Example.Editor", "WASAPI Example.Editor.csproj", "{7A37F38B-D77E-009C-2DA3-60C6E33CF315}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD0827F6-C9D2-85EF-5D4D-1BBA18BE1CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD0827F6-C9D2-85EF-5D4D-1BBA18BE1CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD0827F6-C9D2-85EF-5D4D-1BBA18BE1CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD0827F6-C9D2-85EF-5D4D-1BBA18BE1CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D05B96-F53E-ED5D-8F0E-44BC6297B3C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D05B96-F53E-ED5D-8F0E-44BC6297B3C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D05B96-F53E-ED5D-8F0E-44BC6297B3C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D05B96-F53E-ED5D-8F0E-44BC6297B3C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A37F38B-D77E-009C-2DA3-60C6E33CF315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A37F38B-D77E-009C-2DA3-60C6E33CF315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A37F38B-D77E-009C-2DA3-60C6E33CF315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A37F38B-D77E-009C-2DA3-60C6E33CF315}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
