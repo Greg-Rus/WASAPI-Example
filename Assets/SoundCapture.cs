@@ -74,7 +74,7 @@ public class SoundCapture : MonoBehaviour
         lineSpectrum = new LineSpectrum(fftSize)
         {
             SpectrumProvider = spectrumProvider,
-            UseAverage = true,
+            UseAverage = isAverage,
             BarCount = numBars,
             BarSpacing = 2,
             IsXLogScale = false,
@@ -170,7 +170,7 @@ public class SoundCapture : MonoBehaviour
                 }
                 else
                 {
-                    barData[i] = barData[i] + highScaleNotAverage * Mathf.Sqrt(i / (numBars + 0.0f)) * barData[i];
+                    barData[i] = barData[i] + highScaleAverage * Mathf.Sqrt(i / (numBars + 0.0f)) * barData[i];
                 }
             }
         }
