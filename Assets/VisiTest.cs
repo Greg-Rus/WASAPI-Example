@@ -2,31 +2,35 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using UniRx;
+using UnityEngine.UI;
 
 public class VisiTest : MonoBehaviour {
 
     public SoundCapture capture;
-
-
-    GameObject[] bars;
+    public RawImage image;
+    public CubeView cubePrefab;
+    CubeView[] bars;
     private ReactiveProperty<float>[] reactiveBars;
 
 
     // Use this for initialization
     void Start ()
     {
-        bars = new GameObject[capture.numBars];
+        Debug.Log("START");
+        bars = new CubeView[capture.numBars];
         reactiveBars = new ReactiveProperty<float>[capture.numBars];
         MakeBars();
         InitializeReactiveBars();
-        
-
-
     }
 
     private void InitializeReactiveBars()
     {
+        Debug.Log("Making RX bars");
         for (int i = 0; i < capture.numBars; i++)
         {
             reactiveBars[i] = new ReactiveProperty<float>(0);
@@ -41,13 +45,14 @@ public class VisiTest : MonoBehaviour {
 
     void MakeBars()
     {
-        bars = new GameObject[capture.numBars];
+        Debug.Log("Making bar objects");
+        bars = new CubeView[capture.numBars];
         for (int i = 0; i < bars.Length; i++)
         {
-            GameObject visiBar = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var visiBar = Instantiate(cubePrefab);
             visiBar.transform.position = new Vector3(i, 0, 0);
             visiBar.transform.parent = transform;
-            visiBar.name = "VisiBar " + i;
+            //visiBar.name = "VisiBar " + i;
             bars[i] = visiBar;
         }
     }
@@ -56,33 +61,33 @@ public class VisiTest : MonoBehaviour {
 	void Update () {
 	    if (bars.Length != capture.numBars)
 	    {
-	        foreach (GameObject bar in bars)
+	        foreach (var bar in bars)
 	        {
 	            Destroy(bar);
 	        }
-
 	        MakeBars();
 	    }
 
         UpdateBars();
-            
 
+	    //DrawGraph(); //memory leak!
 
-
-        // Since this is being changed on a seperate thread we do this to be safe
-        //lock(capture.barData)
-        //{
-        //    for (int i = 0; i < capture.barData.Length; i++)
-        //    {
-        //        // Don't make the bars too short
-        //        float curData = Mathf.Max(0.01f, capture.barData[i]);
-
-        //        // Set offset so they stretch off the ground instead of expand in the air
-        //        bars[i].transform.position = new Vector3(i, curData / 2.0f*10.0f, 0);
-        //        bars[i].transform.localScale = new Vector3(1, curData*10.0f, 1);
-        //    }
-        //}
 	}
+
+    private void DrawGraph()
+    {
+        Bitmap bitmap = capture.GetGraph();
+        if (bitmap != null)
+        {
+            ImageConverter converter = new ImageConverter();
+            byte[] ba;
+            ba = (byte[])converter.ConvertTo(bitmap, typeof(byte[]));
+            Texture2D tex = new Texture2D(800, 400);
+            tex.LoadImage(ba);
+            image.texture = tex;
+        }
+        
+    }
 
     private void UpdateBars()
     {
@@ -92,6 +97,19 @@ public class VisiTest : MonoBehaviour {
             {
                 reactiveBars[i].Value = Mathf.Max(0.01f, capture.barData[i]);
             }
+
+            float max = capture.barData.Max();
+            if (max >= 0.1f)
+            {
+                int maxIndex = capture.barData.ToList().IndexOf(max);
+                ColorBar(maxIndex, UnityEngine.Color.red);
+            }
+            
         }
+    }
+
+    private void ColorBar(int inxed, Color32 color)
+    {
+        bars[inxed].ColorCube(color);
     }
 }

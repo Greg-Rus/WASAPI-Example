@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Drawing;
+using UnityEngine;
 using CSCore;
 using CSCore.SoundIn;
 using CSCore.Codecs.WAV;
 using WinformsVisualization.Visualization;
 using CSCore.DSP;
 using CSCore.Streams;
+using Color = System.Drawing.Color;
 
 public class SoundCapture : MonoBehaviour
 {
@@ -139,6 +141,11 @@ public class SoundCapture : MonoBehaviour
         {
             return null;
         }
+    }
+
+    public Bitmap GetGraph()
+    {
+        return lineSpectrum.CreateSpectrumLine(new Size(800,400), Color.Blue, Color.Brown, Color.AliceBlue, false);
     }
 
     void Update()
