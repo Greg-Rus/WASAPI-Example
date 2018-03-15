@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WASAPI-Example.Plugins", "WASAPI-Example.Plugins.csproj", "{1C65A4F4-7491-8730-40C8-2FDDBAD6F48C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WASAPI-Example", "WASAPI-Example.csproj", "{F399B8F5-DAF8-C1DF-070B-14358BEE64DE}"

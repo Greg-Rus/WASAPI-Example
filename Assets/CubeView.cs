@@ -7,29 +7,30 @@ public class CubeView : MonoBehaviour
     public Color32 normalColor = Color.white;
     private IDisposable updateSubsctiption;
 
-    private float t = 0;
+    //private float t = 0;
     public float speed = 1;
 
-    public void ColorCube(Color32 color)
-    {
-        t = 0;
+    //public void ColorCube(Color32 color)
+    //{
+    //    t = 0;
 
-        if(updateSubsctiption != null) updateSubsctiption.Dispose();
+    //    if(updateSubsctiption != null) updateSubsctiption.Dispose();
 
-        updateSubsctiption = Observable.EveryUpdate().Subscribe(_ =>
-        {
-            t += Time.deltaTime * speed;
-            meshRenderer.material.color = Color.Lerp(color, normalColor, t);
-            if(t >= 1f) updateSubsctiption.Dispose();
-        });
+    //    updateSubsctiption = Observable.EveryUpdate().Subscribe(_ =>
+    //    {
+    //        t += Time.deltaTime * speed;
+    //        meshRenderer.material.color = Color.Lerp(color, normalColor, t);
+    //        if(t >= 1f) updateSubsctiption.Dispose();
+    //    });
         
-    }
+    //}
 
     private TimedUpdateLoop _timedUpdateLoop;
 
     public void ColorCube(Color32 color, float time = 3)
     {
-        _timedUpdateLoop = new TimedUpdateLoop(time, () => meshRenderer.material.color = Color.Lerp(color, normalColor, t) );
+        if(_timedUpdateLoop != null) _timedUpdateLoop.Dispose();
+        _timedUpdateLoop = new TimedUpdateLoop(time, (t) => meshRenderer.material.color = Color.Lerp(normalColor, color, t) );
     }
 
 }
@@ -46,10 +47,10 @@ public class TimedUpdateLoop : IDisposable
         _excecuteEveryUpdateAction = excecuteEveryUpdateAction;
         _deadline = Time.time + timeSpanInSeconds;
 
-        var observable = Observable.EveryUpdate().TakeWhile(_ => Time.time > _deadline);
-        _subscription = observable.Subscribe(_ =>
+        _subscription = Observable.EveryUpdate().TakeWhile(_ => Time.time < _deadline).Subscribe(_ =>
         {
-            _excecuteEveryUpdateAction();
+            var percentElapsed = (_deadline - Time.time)/ timeSpanInSeconds;
+            _excecuteEveryUpdateAction(percentElapsed);
         });
     }
 

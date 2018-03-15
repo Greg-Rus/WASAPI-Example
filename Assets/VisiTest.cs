@@ -16,14 +16,21 @@ public class VisiTest : MonoBehaviour {
     public CubeView cubePrefab;
     CubeView[] bars;
     private ReactiveProperty<float>[] reactiveBars;
+    public UnityEngine.Color MaxColor;
+    public float MaxColorFadeTime = 0.3f;
+    public UnityEngine.Color BeatColor;
 
+    private Queue<int> maxBarQueue;
+    public Text bpm;
 
     // Use this for initialization
     void Start ()
     {
+        Application.targetFrameRate = 60;
         Debug.Log("START");
         bars = new CubeView[capture.numBars];
         reactiveBars = new ReactiveProperty<float>[capture.numBars];
+        maxBarQueue = new Queue<int>(120); //queue for 120 frames. Expecceted 60 frames for two seconds.
         MakeBars();
         InitializeReactiveBars();
     }
@@ -93,23 +100,71 @@ public class VisiTest : MonoBehaviour {
     {
         lock (capture.barData)
         {
-            for (int i = 0; i < capture.numBars; i++)
+            UpdateBarValues(capture);
+            var maxIndex = FindLargesBar();
+            if (maxIndex.HasValue)
             {
-                reactiveBars[i].Value = Mathf.Max(0.01f, capture.barData[i]);
-            }
+                UpdateMaxBarQueue((int)maxIndex);
+                var groups = GetBeatGroups();
+                var candidateGroup = GetBeatCandidateBeatGroup(groups);
+                var beatCandidateIndex = GetBeatCandidate(candidateGroup);
+                if (maxIndex == beatCandidateIndex)
+                {
+                    ColorBar((int)maxIndex, BeatColor);
+                }
+                else
+                {
+                    ColorBar((int)maxIndex, MaxColor);
+                }
 
-            float max = capture.barData.Max();
-            if (max >= 0.1f)
-            {
-                int maxIndex = capture.barData.ToList().IndexOf(max);
-                ColorBar(maxIndex, UnityEngine.Color.red);
+                //bpm.text = ((candidateGroup.Count() * 0.5f) * 60 / Time.deltaTime).ToString();
+                bpm.text = (candidateGroup.Count() * 0.5f).ToString();
             }
-            
         }
     }
 
-    private void ColorBar(int inxed, Color32 color)
+    private int? FindLargesBar()
     {
-        bars[inxed].ColorCube(color);
+        var max = capture.barData.Max();
+        if (max >= 0.1f)
+        {
+            return capture.barData.ToList().IndexOf(max);
+        }
+        return null;
+    }
+
+    private void UpdateBarValues(SoundCapture capturedFrame)
+    {
+        for (int i = 0; i < capturedFrame.numBars; i++)
+        {
+            reactiveBars[i].Value = Mathf.Max(0.01f, capturedFrame.barData[i]);
+        }
+    }
+
+    private void ColorBar(int index, Color32 color)
+    {
+        bars[index].ColorCube(color,MaxColorFadeTime);
+    }
+
+    private void UpdateMaxBarQueue(int newMaxIndex)
+    {
+        Debug.Log("Count: " + maxBarQueue.Count +" time: " + Time.time +" index: " + newMaxIndex);
+        if (maxBarQueue.Count == 128) maxBarQueue.Dequeue();
+        maxBarQueue.Enqueue(newMaxIndex);
+    }
+
+    private IOrderedEnumerable<IGrouping<int, int>> GetBeatGroups()
+    {
+        return maxBarQueue.GroupBy(bar => bar).OrderByDescending(group => group.Count());
+    }
+
+    private IGrouping<int, int> GetBeatCandidateBeatGroup(IOrderedEnumerable<IGrouping<int, int>> beatGroups)
+    {
+        return beatGroups.Take(1).First();
+    }
+
+    private int GetBeatCandidate(IGrouping<int, int> beatCandidateGroup)
+    {
+        return beatCandidateGroup.Key;
     }
 }
