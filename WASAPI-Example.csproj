@@ -322,6 +322,7 @@
     <Compile Include="Assets\SonusVizScripts\MouseLocker.cs" />
     <Compile Include="Assets\SonusVizScripts\ScreenshotHelper.cs" />
     <Compile Include="Assets\SoundCapture.cs" />
+    <Compile Include="Assets\SumBars.cs" />
     <Compile Include="Assets\VisiTest.cs" />
     <Compile Include="Assets\Visualization\BasicSpectrumProvider.cs" />
     <Compile Include="Assets\Visualization\GradientCalculator.cs" />

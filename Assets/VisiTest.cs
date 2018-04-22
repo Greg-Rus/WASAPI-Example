@@ -15,10 +15,16 @@ public class VisiTest : MonoBehaviour {
     public RawImage image;
     public CubeView cubePrefab;
     CubeView[] bars;
+
     private ReactiveProperty<float>[] reactiveBars;
     public UnityEngine.Color MaxColor;
     public float MaxColorFadeTime = 0.3f;
     public UnityEngine.Color BeatColor;
+    public float SumBarScaleFactor = 10;
+    public float BeatThreshold;
+    public float BeatHold = 0.2f;
+    public float BeatDecay = 0.98f;
+    private float BeatHoldTimer;
 
     private Queue<int> maxBarQueue;
     public Text bpm;
@@ -26,11 +32,10 @@ public class VisiTest : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        Application.targetFrameRate = 60;
         Debug.Log("START");
         bars = new CubeView[capture.numBars];
         reactiveBars = new ReactiveProperty<float>[capture.numBars];
-        maxBarQueue = new Queue<int>(120); //queue for 120 frames. Expecceted 60 frames for two seconds.
+        maxBarQueue = new Queue<int>(120);
         MakeBars();
         InitializeReactiveBars();
     }
@@ -59,12 +64,10 @@ public class VisiTest : MonoBehaviour {
             var visiBar = Instantiate(cubePrefab);
             visiBar.transform.position = new Vector3(i, 0, 0);
             visiBar.transform.parent = transform;
-            //visiBar.name = "VisiBar " + i;
             bars[i] = visiBar;
         }
     }
-	
-	// Update is called once per frame
+
 	void Update () {
 	    if (bars.Length != capture.numBars)
 	    {
@@ -74,27 +77,8 @@ public class VisiTest : MonoBehaviour {
 	        }
 	        MakeBars();
 	    }
-
         UpdateBars();
-
-	    //DrawGraph(); //memory leak!
-
 	}
-
-    private void DrawGraph()
-    {
-        Bitmap bitmap = capture.GetGraph();
-        if (bitmap != null)
-        {
-            ImageConverter converter = new ImageConverter();
-            byte[] ba;
-            ba = (byte[])converter.ConvertTo(bitmap, typeof(byte[]));
-            Texture2D tex = new Texture2D(800, 400);
-            tex.LoadImage(ba);
-            image.texture = tex;
-        }
-        
-    }
 
     private void UpdateBars()
     {
@@ -116,8 +100,6 @@ public class VisiTest : MonoBehaviour {
                 {
                     ColorBar((int)maxIndex, MaxColor);
                 }
-
-                //bpm.text = ((candidateGroup.Count() * 0.5f) * 60 / Time.deltaTime).ToString();
                 bpm.text = (candidateGroup.Count() * 0.5f).ToString();
             }
         }
@@ -139,7 +121,10 @@ public class VisiTest : MonoBehaviour {
         {
             reactiveBars[i].Value = Mathf.Max(0.01f, capturedFrame.barData[i]);
         }
+        
     }
+
+    
 
     private void ColorBar(int index, Color32 color)
     {
@@ -148,7 +133,7 @@ public class VisiTest : MonoBehaviour {
 
     private void UpdateMaxBarQueue(int newMaxIndex)
     {
-        Debug.Log("Count: " + maxBarQueue.Count +" time: " + Time.time +" index: " + newMaxIndex);
+        //Debug.Log("Count: " + maxBarQueue.Count +" time: " + Time.time +" index: " + newMaxIndex);
         if (maxBarQueue.Count == 128) maxBarQueue.Dequeue();
         maxBarQueue.Enqueue(newMaxIndex);
     }
