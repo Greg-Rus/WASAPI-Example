@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2017.3.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -300,7 +302,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CubeView.cs" />
     <Compile Include="Assets\Examples\0_SimpleVolume\VolumeBlock.cs" />
     <Compile Include="Assets\Examples\1_Spectrum\SpectrumBar.cs" />
     <Compile Include="Assets\Examples\1_Spectrum\SpectrumSpawner.cs" />
@@ -315,15 +316,24 @@
     <Compile Include="Assets\Examples\7_Streaks\StreakCube.cs" />
     <Compile Include="Assets\Examples\7_Streaks\StreakCubeManager.cs" />
     <Compile Include="Assets\Examples\8_BasicShader\BasicShaderGrid.cs" />
+    <Compile Include="Assets\Scripts\BaseFrameLayer\BufferedFrameModel.cs" />
+    <Compile Include="Assets\Scripts\BaseFrameLayer\Configuration.cs" />
+    <Compile Include="Assets\Scripts\BaseFrameLayer\BasicSingleFrameModel.cs" />
+    <Compile Include="Assets\Scripts\BaseFrameLayer\FrameModel2D.cs" />
+    <Compile Include="Assets\Scripts\BaseFrameLayer\Main.cs" />
+    <Compile Include="Assets\Scripts\Controllers\BarFactory.cs" />
+    <Compile Include="Assets\Scripts\Controllers\BarGraphController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\MultiBarGraphController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\SumBarController.cs" />
+    <Compile Include="Assets\Scripts\SoundCaptureAPI\SoundCapture.cs" />
+    <Compile Include="Assets\Scripts\SumBars.cs" />
+    <Compile Include="Assets\Scripts\ViewLayer\CubeView.cs" />
     <Compile Include="Assets\SonusVizScripts\AudioInputSource.cs" />
     <Compile Include="Assets\SonusVizScripts\BackgroundFlasher.cs" />
     <Compile Include="Assets\SonusVizScripts\ColorHelper.cs" />
     <Compile Include="Assets\SonusVizScripts\KeyboardSpectrumMultiplierSetter.cs" />
     <Compile Include="Assets\SonusVizScripts\MouseLocker.cs" />
     <Compile Include="Assets\SonusVizScripts\ScreenshotHelper.cs" />
-    <Compile Include="Assets\SoundCapture.cs" />
-    <Compile Include="Assets\SumBars.cs" />
-    <Compile Include="Assets\VisiTest.cs" />
     <Compile Include="Assets\Visualization\BasicSpectrumProvider.cs" />
     <Compile Include="Assets\Visualization\GradientCalculator.cs" />
     <Compile Include="Assets\Visualization\ISpectrumProvider.cs" />

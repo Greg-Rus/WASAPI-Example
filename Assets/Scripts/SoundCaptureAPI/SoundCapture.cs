@@ -8,7 +8,15 @@ using CSCore.DSP;
 using CSCore.Streams;
 using Color = System.Drawing.Color;
 
-public class SoundCapture : MonoBehaviour
+
+
+public interface IBarData
+{
+    float[] BarValues { get; }
+    int NumberOfBars { get; }
+}
+
+public class SoundCapture : MonoBehaviour, IBarData
 {
     // Use this for initialization
 
@@ -182,6 +190,22 @@ public class SoundCapture : MonoBehaviour
             }
         }
 
+    }
+
+    public float[] BarValues
+    {
+        get
+        {
+            lock (barData)
+            {
+                return barData;
+            }
+        }
+    }
+
+    public int NumberOfBars
+    {
+        get { return numBars; }
     }
 }
 
