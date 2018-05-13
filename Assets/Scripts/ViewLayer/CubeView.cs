@@ -4,7 +4,7 @@ using UnityEngine;
 public class CubeView : MonoBehaviour
 {
     public MeshRenderer meshRenderer;
-    public Color32 normalColor = Color.white;
+    public Color32 normalColor;
     private IDisposable updateSubsctiption;
 
     //private float t = 0;
