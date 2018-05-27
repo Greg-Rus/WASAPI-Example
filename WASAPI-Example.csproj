@@ -322,8 +322,10 @@
     <Compile Include="Assets\Scripts\Controllers\SumBarController.cs" />
     <Compile Include="Assets\Scripts\External\BasicFlyCam.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
+    <Compile Include="Assets\Scripts\MainMesh.cs" />
     <Compile Include="Assets\Scripts\ModelLayer\BufferedFrameModel.cs" />
     <Compile Include="Assets\Scripts\ModelLayer\FrameModel2D.cs" />
+    <Compile Include="Assets\Scripts\ModelLayer\MeshModel.cs" />
     <Compile Include="Assets\Scripts\SoundCaptureAPI\SoundCapture.cs" />
     <Compile Include="Assets\Scripts\SumBars.cs" />
     <Compile Include="Assets\Scripts\ViewLayer\CubeView.cs" />

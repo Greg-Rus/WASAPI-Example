@@ -9,12 +9,14 @@ using UnityEngine;
 public interface IReactiveBarData
 {
     ReactiveProperty<float> GetReactiveBarAtIndex(int index);
+    ReactiveProperty<float[]> ReactiveFrame{get;}
     int NumberOfBars { get; }
 }
 
 public class BasicSingleFrameModel : MonoBehaviour, IReactiveBarData
 {
     private ReactiveProperty<float>[] _reactiveBars;
+    private ReactiveProperty<float[]> _reactiveframe;
     private IBarData _barDataProvider;
     public float BarUpdateThreshold = 0.01f;
 
@@ -30,6 +32,7 @@ public class BasicSingleFrameModel : MonoBehaviour, IReactiveBarData
         {
             _reactiveBars[i] = new ReactiveProperty<float>(0);
         }
+        _reactiveframe = new ReactiveProperty<float[]>();
     }
 
     void Update()
@@ -38,6 +41,8 @@ public class BasicSingleFrameModel : MonoBehaviour, IReactiveBarData
         {
             _reactiveBars[i].Value = Mathf.Max(BarUpdateThreshold, _barDataProvider.BarValues[i]);
         }
+
+        _reactiveframe.Value = _barDataProvider.BarValues;
     }
 
     public int NumberOfBars
@@ -49,5 +54,10 @@ public class BasicSingleFrameModel : MonoBehaviour, IReactiveBarData
     {
         if(index < _reactiveBars.Length) return _reactiveBars[index];
         else throw new ArgumentOutOfRangeException(string.Format("Requested index {0}, but array of reactive bars has lenght of {1}", index, _reactiveBars.Length));
+    }
+
+    public ReactiveProperty<float[]> ReactiveFrame
+    {
+        get { return _reactiveframe; }
     }
 }
