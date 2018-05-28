@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework.Constraints;
 using UniRx;
 using UnityEngine;
@@ -32,7 +33,7 @@ public class BasicSingleFrameModel : MonoBehaviour, IReactiveBarData
         {
             _reactiveBars[i] = new ReactiveProperty<float>(0);
         }
-        _reactiveframe = new ReactiveProperty<float[]>();
+        _reactiveframe = new ReactiveProperty<float[]>(new float[_barDataProvider.NumberOfBars]);
     }
 
     void Update()
@@ -41,8 +42,8 @@ public class BasicSingleFrameModel : MonoBehaviour, IReactiveBarData
         {
             _reactiveBars[i].Value = Mathf.Max(BarUpdateThreshold, _barDataProvider.BarValues[i]);
         }
-
-        _reactiveframe.Value = _barDataProvider.BarValues;
+        _reactiveframe.Value = _barDataProvider.BarValues.ToArray();
+        //Debug.Log("Basic " + _barDataProvider.BarValues.Sum());
     }
 
     public int NumberOfBars

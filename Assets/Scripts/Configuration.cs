@@ -13,10 +13,3 @@ public class Configuration: ScriptableObject
     public int HistoryFrameCount;
     public bool IsMirrored;
 }
-
-[CreateAssetMenu(menuName = "Mesh Config")]
-public class MeshConfig : ScriptableObject
-{
-    public int NumberOfBars;
-    public int HistoryFrameCount;
-}

@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using System;
+using System.Linq;
 using UniRx;
 using UniRx.InternalUtil;
 
 public class MeshModel {
     private readonly IReactiveBarData _singleFrameModel;
     private readonly MeshConfig _config;
-
+    public Action OnHistoryChanged;
     private readonly Queue<float[]> _history;
-    private ReactiveCollection<float[]> _reactiveQueue;
- 
+    public Queue<float[]> History
+    {
+        get { return _history; }
+    }
+
     public MeshModel(IReactiveBarData singleFrameModel, MeshConfig config)
     {
         _singleFrameModel = singleFrameModel;
         _config = config;
-        _history = new Queue<float[]>();
-        _reactiveQueue  = _history.ToReactiveCollection();
+        _history = new Queue<float[]>(_config.HistoryFrameCount);
+
+        //OnHistoryChanged = () => { Debug.Log(_history.Count); };
+
         SetupSubscription();
+
         
 
     }
@@ -32,8 +39,13 @@ public class MeshModel {
 
     public void UpdateFrameQueue(float[] frame)
     {
-        _history.Dequeue();
+        Debug.Log("Frame: " +frame.Sum());
+        if (_history.Count == _config.HistoryFrameCount)
+        {
+            _history.Dequeue();
+        }
         _history.Enqueue(frame);
+        if(OnHistoryChanged != null) OnHistoryChanged();
     }
 }
 
@@ -48,16 +60,16 @@ public class FrameObserver : IObserver<float[]>
 
     public void OnCompleted()
     {
-        
+        Debug.LogError("Completed");
     }
 
     public void OnError(Exception error)
     {
-        
+        Debug.LogError(error.Message);
     }
 
     public void OnNext(float[] value)
     {
-        _frameSetter(value);
+        if(value != null) _frameSetter(value);
     }
 }
